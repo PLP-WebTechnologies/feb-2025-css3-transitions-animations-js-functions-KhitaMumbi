@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Preference & Animation Demo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    .light-theme {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    .dark-theme {
+      background-color: #1e1e1e;
+      color: #ffffff;
+    }
+
+    .animate {
+      animation: flash 0.4s;
+    }
+
+    @keyframes flash {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+
+    #toggleBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>User Preference: Theme Toggle</h1>
+  <button id="toggleBtn">Toggle Theme</button>
+
+  <script>
+    function applyTheme(theme) {
+      document.body.classList.remove("light-theme", "dark-theme");
+      document.body.classList.add(`${theme}-theme`);
+    }
+
+    function savePreference(key, value) {
+      localStorage.setItem(key, value);
+    }
+
+    function getPreference(key, defaultValue) {
+      return localStorage.getItem(key) || defaultValue;
+    }
+
+    function animateBody() {
+      document.body.classList.add("animate");
+      setTimeout(() => {
+        document.body.classList.remove("animate");
+      }, 400);
+    }
+
+    function initPreferences() {
+      const savedTheme = getPreference("theme", "light");
+      applyTheme(savedTheme);
+    }
+
+    document.getElementById("toggleBtn").addEventListener("click", () => {
+      const currentTheme = getPreference("theme", "light");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      savePreference("theme", newTheme);
+      applyTheme(newTheme);
+      animateBody(); // Trigger animation
+    });
+
+    // Initialize on load
+    initPreferences();
+  </script>
+
+</body>
+</html>
